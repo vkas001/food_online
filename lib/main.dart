@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:food_online/pages/signup_page.dart';
-import 'controller/focus_node.dart';
+
+import 'app/app.dart';
+import 'app/router.dart';
+import 'features/auth/controllers/auth_provider.dart';
+import 'features/auth/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,20 +22,9 @@ void main() async {
     await Firebase.initializeApp();
   }
 
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  final SignupFocusController _focusController = SignupFocusController();
-
-  MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SignupPage(controller: SignupFocusController()),
-    );
-  }
+  final authProvider = AuthProvider(authService: AuthService());
+  runApp(FoodOnlineApp(
+    authProvider: authProvider,
+    router: createRouter(authProvider),
+  ));
 }
